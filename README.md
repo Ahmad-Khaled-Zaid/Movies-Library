@@ -14,4 +14,5 @@ get information about  movies.
 5- create routes and add the needed information 
 
 ## Project Features
-users can get data about movies from this website and can route to different endPoints, when entering wrong route or some error happen from the server side a message will be shown to the user
+users can get data about movies from this website and can route to different endPoints, when entering wrong route or some error happen from the server side a message will be shown to the user,
+users right now can get some info about movies,latest, trending, images and more
