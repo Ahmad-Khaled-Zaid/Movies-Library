@@ -1,138 +1,31 @@
-const { default: axios } = require("axios");
 const express = require("express");
-const { handle } = require("express/lib/application");
 const app = express();
-const data = require("./Movie_Data/data.json");
-require("dotenv").config();
-
-// constructor to re-shape the data in the home page
-function Movie(title, poster_path, overview) {
-  this.title = title;
-  this.poster_path = poster_path;
-  this.overview = overview;
-}
-
-// constructor to re-shape the data in the Trend page
-function Movies(id, title, release_date, poster_path, overview) {
-  this.id = id;
-  this.title = title;
-  this.release_date = release_date;
-  this.poster_path = poster_path;
-  this.overview = overview;
-}
-function TV(name, adult, lastShow, Episodes) {
-  this.name = name;
-  this.adult = adult;
-  this.lastShow = lastShow;
-  this.Episodes = Episodes;
-}
+const cors = require("cors");
+app.use(cors());
+const Trends = require("./controllers/Trends.controller");
+const search = require("./controllers/search.controller");
+const get_images = require("./controllers/get_images.controller");
+const TV_latest = require("./controllers/TV_latest.controller");
+const favoriteMsg = require("./controllers/favorite.controller");
+const HomeMovie = require("./controllers/HomeMovie.controller");
 
 //Home end point
-app.get("/", (req, res) => {
-  let object = new Movie(data.title, data.poster_path, data.overview);
-  res.json(object);
-});
+app.get("/", HomeMovie);
 
-// Trend end point
-app.get("/trending", (req, res) => {
-  axios
-    .get(
-      `https://api.themoviedb.org/3/trending/movie/week?api_key=${process.env.API_KEY}`
-    )
-    .then((result) => {
-      console.log(result.data.results);
-      let data = result.data.results;
-      let filteredData = data.map((element) => {
-        return new Movies(
-          element.id,
-          element.title,
-          element.release_date,
-          element.poster_path,
-          element.overview
-        );
-      });
-      res.json(filteredData);
-    })
-    .catch((error) => {
-      res.send({ responseText: "Sorry, something went wrong" });
-    });
-});
+// end point to show the trending movies
+app.get("/trending", Trends);
 
-// end point to search for specific movie
-app.get("/search", (req, res) => {
-  let name = req.query.name;
-  axios
-    .get(
-      `https://api.themoviedb.org/3/search/movie?api_key=${process.env.API_KEY}&query=${name}`
-    )
-    .then((result) => {
-      let data = result.data.results;
-
-      let filteredData = data.map((element) => {
-        return new Movies(
-          element.id,
-          element.title,
-          element.release_date,
-          element.poster_path,
-          element.overview
-        );
-      });
-      res.json(filteredData);
-    })
-    .catch((error) => {
-      res.send({ responseText: "Sorry, something went wrong" });
-    });
-});
+// end point to search by keyword
+app.get("/search", search);
 
 // end points to get images
-app.get("/images", (req, res) => {
-  axios
-    .get(
-      `https://api.themoviedb.org/3/movie/238/images?api_key=${process.env.API_KEY}`
-    )
-    .then((Data) => {
-      res.send(Data.data);
-    })
-    .catch((error) => {
-      res.send({ responseText: "Sorry, something went wrong" });
-    });
-});
+app.get("/images", get_images);
 
 // end point to show latest TV shows
-app.get("/TV", (req, res) => {
-  axios
-    .get(
-      `https://api.themoviedb.org/3/tv/latest?api_key=${process.env.API_KEY}`
-    )
-    .then((Data) => {
-      console.log(Data.data.name);
-      console.log(Data.data.adult);
-      console.log(Data.data.last_episode_to_air.air_date);
-      console.log(Data.data.last_episode_to_air.episode_number);
-      let latest = new TV(
-        Data.data.name,
-        Data.data.adult,
-        Data.data.last_episode_to_air.air_date,
-        Data.data.last_episode_to_air.episode_number
-      );
-      res.json(latest);
-    })
-    .catch((error) => {
-      res.send({ responseText: "Sorry, something went wrong" });
-    });
-});
-// app.get("/searchTV", (req, res) => {
-//   tvName = req.query.Name;
-//   console.log(req.query);
-//   axios.get(
-//     `https://api.themoviedb.org/3/search/tv?api_key=${process.env.API_KEY}&query=${tvName}`
-//   );
-// });
+app.get("/TV", TV_latest);
 
-// end point to favorite page
-app.get("/favorite", (req, res) => {
-  res.send("Welcome to Favorite Page");
-});
+// end point to show welcome message
+app.get("/favorite", favoriteMsg);
 
 // handle error 404
 app.use((request, response, next) => {
