@@ -50,6 +50,49 @@ function getHandler(req, res) {
       handleError(err, req, res);
     });
 }
+
+function updateMovie(req, res) {
+  let id = req.params.id;
+  let movie_name = req.body.movie_name;
+  let release_date = req.body.release_date;
+  let trailer_vedio = req.body.trailer_vedio;
+  let sql = `UPDATE movies SET movie_name =$1 , release_date =$2, trailer_vedio=$3  WHERE id = ${id} RETURNING *`;
+  let values = [movie_name, release_date, trailer_vedio];
+  client
+    .query(sql, values)
+    .then((result) => {
+      console.log(result.rows[0]);
+      res.json(result.rows[0]);
+    })
+    .catch((err) => res.send("error"));
+}
+function deleteMovie(req, res) {
+  let id = req.params.id;
+  let sql = `DELETE FROM movies WHERE id =${id} RETURNING *`;
+  client
+    .query(sql)
+    .then((result) => {
+      res.status(204).json([]);
+    })
+    .catch((err) => {
+      res.send("error");
+    });
+}
+function getMovie(req, res) {
+  let id = req.params.id;
+  let sql = `SELECT * FROM movies WHERE id=${id}  ;`;
+  client
+    .query(sql)
+    .then((result) => {
+      console.log(result);
+      res.json(result.rows);
+    })
+    .catch((err) => {
+      // handleError(err, req, res);
+      res.send("error")
+    });
+}
+
 //Home end point
 app.get("/", HomeMovie);
 
@@ -73,6 +116,16 @@ app.post("/addMovie", addMovie);
 
 // endpoint to get all the movies from the database
 app.get("/getData", getHandler);
+
+// endpoint to update specific record from the database
+
+app.put("/updateMovie/:id", updateMovie);
+
+// endpoint to delete specific record from the database
+app.delete("/deleteMovie/:id", deleteMovie);
+
+// endpoint to get specific record from the database
+app.get("/getMovie/:id", getMovie);
 
 // handle error 404
 app.use((request, response, next) => {

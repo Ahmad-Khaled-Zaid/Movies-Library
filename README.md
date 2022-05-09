@@ -20,3 +20,4 @@ users can get data about movies from this website and can route to different end
 users right now can get some info about movies,latest, trending, images and more
 updated:
 now users can add send their favorite movies to the server these movies will be saved permanently on the databases, also user able now to retrieve all the movies stores in the data base.
+the server had been updated, the users now able to update the movie data inside the database, and also they are able to get specific movie depend on the id, last but not least delete a record is the last feature added to this project
