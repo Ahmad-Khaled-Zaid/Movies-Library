@@ -14,7 +14,7 @@ const get_images = require("./controllers/get_images.controller");
 const TV_latest = require("./controllers/TV_latest.controller");
 const favoriteMsg = require("./controllers/favorite.controller");
 const HomeMovie = require("./controllers/HomeMovie.controller");
-let url = "postgres://ahmadzaid:123456@localhost:5432/movies";
+let url = process.env.URL;
 
 const { Client } = require("pg");
 const client = new Client(url);
@@ -28,7 +28,6 @@ function addMovie(req, res) {
   client
     .query(sql, values)
     .then((result) => {
-      console.log(result);
       res.status(201).json(result.rows);
     })
     .catch((err) => {
@@ -71,6 +70,8 @@ app.get("/favorite", favoriteMsg);
 
 // end point to add a movie to the database
 app.post("/addMovie", addMovie);
+
+// endpoint to get all the movies from the database
 app.get("/getData", getHandler);
 
 // handle error 404
