@@ -24,7 +24,7 @@ const client = new Client({
     rejectUnauthorized: false,
 
   },
-  // ssl: process.env.DATABASE_URL ? true : false,
+  // ssl: process.env.DATABASE_URL ? true : false, 
 });
 
 function addMovie(req, res) {
