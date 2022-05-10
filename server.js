@@ -38,9 +38,7 @@ function addMovie(req, res) {
     .then((result) => {
       res.json(result.rows);
     })
-    .catch((err) => {
-      handleError(err, req, res);
-    });
+    
 }
 function handleError(error, req, res) {
   res.status(500).send(error);
