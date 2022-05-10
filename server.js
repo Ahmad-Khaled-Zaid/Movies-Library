@@ -29,16 +29,22 @@ const client = new Client({
 
 function addMovie(req, res) {
   console.log(req.body);
-  res.send("movie had been successfully added to the database");
+  // res.send("movie had been successfully added to the database");
   let { movie_name, release_date, trailer_vedio, comment } = req.body;
   let sql = `INSERT INTO movies(movie_name,release_date,trailer_vedio,comment) VALUES($1, $2, $3, $4) RETURNING *;`;
   let values = [movie_name, release_date, trailer_vedio, comment];
   client
     .query(sql, values)
     .then((result) => {
-      res.json(result.rows);
+      // res.status(201).json(result.rows);
+      res.json({
+        data: result.rows,
+        msg: "movie had been successfully added to the database",
+      });
     })
-    
+    .catch((err) => {
+      handleError(err, req, res);
+    });
 }
 function handleError(error, req, res) {
   res.status(500).send(error);
