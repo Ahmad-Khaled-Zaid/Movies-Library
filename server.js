@@ -17,7 +17,12 @@ const HomeMovie = require("./controllers/HomeMovie.controller");
 let url = process.env.URL;
 
 const { Client } = require("pg");
-const client = new Client(url);
+// const client = new Client(url);
+const client = new Client({
+  connectionString:url,
+  
+});
+
 
 function addMovie(req, res) {
   console.log(req.body);
