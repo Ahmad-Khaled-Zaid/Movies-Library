@@ -7,18 +7,14 @@ app.use(cors());
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-// PORT=3004
-// API_KEY=b9a5aa8cd4ca6b06fa55dbc4d6c4f1cb
-// MONGO_URL=mongodb://localhost:27017
-// DB_NAME=test
-// URL=postgres://ahmadzaid:123456@localhost:5432/movies
+
 const Trends = require("./controllers/Trends.controller");
 const search = require("./controllers/search.controller");
 const get_images = require("./controllers/get_images.controller");
 const TV_latest = require("./controllers/TV_latest.controller");
 const favoriteMsg = require("./controllers/favorite.controller");
 const HomeMovie = require("./controllers/HomeMovie.controller");
-let url = process.env.URL;
+// let url = process.env.URL;
 
 const { Client } = require("pg");
 // const client = new Client(url);
