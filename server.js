@@ -22,21 +22,18 @@ const client = new Client({
   connectionString: process.env.DATABASE_URL,
   ssl: {
     rejectUnauthorized: false,
-
   },
-  // ssl: process.env.DATABASE_URL ? true : false,  
+  // ssl: process.env.DATABASE_URL ? true : false,
 });
 
 function addMovie(req, res) {
   console.log(req.body);
-  // res.send("movie had been successfully added to the database");
   let { movie_name, release_date, trailer_vedio, comment } = req.body;
   let sql = `INSERT INTO movies(movie_name,release_date,trailer_vedio,comment) VALUES($1, $2, $3, $4) RETURNING *;`;
   let values = [movie_name, release_date, trailer_vedio, comment];
   client
     .query(sql, values)
     .then((result) => {
-      // res.status(201).json(result.rows);
       res.json({
         data: result.rows,
         msg: "movie had been successfully added to the database",
