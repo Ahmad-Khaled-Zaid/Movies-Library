@@ -22,9 +22,9 @@ const client = new Client(url);
 function addMovie(req, res) {
   console.log(req.body);
   res.send("movie had been successfully added to the database");
-  let { movie_name, release_date, trailer_vedio } = req.body;
-  let sql = `INSERT INTO movies(movie_name,release_date,trailer_vedio) VALUES($1, $2, $3) RETURNING *;`;
-  let values = [movie_name, release_date, trailer_vedio];
+  let { movie_name, release_date, trailer_vedio, comment } = req.body;
+  let sql = `INSERT INTO movies(movie_name,release_date,trailer_vedio,comment) VALUES($1, $2, $3, $4) RETURNING *;`;
+  let values = [movie_name, release_date, trailer_vedio, comment];
   client
     .query(sql, values)
     .then((result) => {
@@ -53,11 +53,9 @@ function getHandler(req, res) {
 
 function updateMovie(req, res) {
   let id = req.params.id;
-  let movie_name = req.body.movie_name;
-  let release_date = req.body.release_date;
-  let trailer_vedio = req.body.trailer_vedio;
-  let sql = `UPDATE movies SET movie_name =$1 , release_date =$2, trailer_vedio=$3  WHERE id = ${id} RETURNING *`;
-  let values = [movie_name, release_date, trailer_vedio];
+  let comment = req.body.comment;
+  let sql = `UPDATE movies SET comment=$1  WHERE id = ${id} RETURNING *`;
+  let values = [comment];
   client
     .query(sql, values)
     .then((result) => {
@@ -89,7 +87,7 @@ function getMovie(req, res) {
     })
     .catch((err) => {
       // handleError(err, req, res);
-      res.send("error")
+      res.send("error");
     });
 }
 
