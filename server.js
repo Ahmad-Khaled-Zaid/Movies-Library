@@ -36,7 +36,7 @@ function addMovie(req, res) {
   client
     .query(sql, values)
     .then((result) => {
-      res.status(201).json(result.rows);
+      res.json(result.rows);
     })
     .catch((err) => {
       handleError(err, req, res);
